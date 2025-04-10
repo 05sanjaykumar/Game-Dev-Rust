@@ -1,4 +1,6 @@
 use bevy::prelude::*;
+use bevy::input::ButtonInput;
+use bevy::input::keyboard::KeyCode;
 
 #[derive(Component)]
 struct Player;
@@ -13,20 +15,38 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    // Camera
-    commands.spawn(Camera2dBundle::default());
+    // Spawn 2D camera
+    commands.spawn(Camera2d);
 
+    // Spawn player sprite
     commands.spawn((
-        SpriteBundle {
-            sprite: Sprite {
-                color: Color::rgb(0.3, 0.7, 0.9),
-                custom_size: Some(Vec2::new(50.0, 50.0)),  // size of player square
-                ..default()
-            },
-            transform: Transform::from_xyz(0.0, -200.0, 0.0),  // initial position
+        Sprite {
+            color: Color::srgb(0.3, 0.7, 0.9),
+            custom_size: Some(Vec2::new(50.0, 50.0)),
             ..default()
         },
-        Player, // add marker component
+        Transform::from_xyz(0.0, -200.0, 0.0),
+        Visibility::Visible,
+        Player,
     ));
 }
 
+fn player_movement_system(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut query: Query<&mut Transform, With<Player>>,
+    time: Res<Time>,
+) {
+    const SPEED: f32 = 300.0;
+    for mut transform in &mut query {
+        let mut direction = 0.0;
+
+        if keyboard_input.pressed(KeyCode::KeyA) {
+            direction -= 1.0;
+        }
+        if keyboard_input.pressed(KeyCode::KeyD) {
+            direction += 1.0;
+        }
+
+        transform.translation.x += direction * SPEED * time.delta().as_secs_f32();
+    }
+}
