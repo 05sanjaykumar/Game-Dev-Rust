@@ -32,7 +32,7 @@ fn setup(mut commands: Commands) {
 }
 
 fn player_movement_system(
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut Transform, With<Player>>,
     time: Res<Time>,
 ) {
