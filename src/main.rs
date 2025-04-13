@@ -11,8 +11,17 @@ fn main() {
         .insert_resource(ClearColor(Color::BLACK))
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
-        .add_systems(Update, player_movement_system)
+        .add_systems(Update, (player_movement_system,camera_follow_system))
         .run();
+}
+
+fn camera_follow_system(player_query: Query<&Transform, With<Player>>,mut camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>,) {
+    if let Ok(player_transform) = player_query.get_single() {
+        if let Ok(mut camera_transform) = camera_query.get_single_mut() {
+            camera_transform.translation.x = player_transform.translation.x;
+            camera_transform.translation.y = player_transform.translation.y;
+        }
+    }
 }
 
 fn setup(mut commands: Commands) {
