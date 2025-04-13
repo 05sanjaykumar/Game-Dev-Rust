@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy::input::ButtonInput;
 use bevy::input::keyboard::KeyCode;
+// use bevy::math::Vec2;
 
 #[derive(Component)]
 struct Player;
@@ -38,15 +39,20 @@ fn player_movement_system(
 ) {
     const SPEED: f32 = 300.0;
     for mut transform in &mut query {
-        let mut direction = 0.0;
-
+        let mut direction = Vec2::ZERO;
         if keyboard_input.pressed(KeyCode::KeyA) {
-            direction -= 1.0;
+            direction.x -= 1.0;
         }
         if keyboard_input.pressed(KeyCode::KeyD) {
-            direction += 1.0;
+            direction.x += 1.0;
         }
-
-        transform.translation.x += direction * SPEED * time.delta().as_secs_f32();
+        if keyboard_input.pressed(KeyCode::KeyW) {
+            direction.y += 1.0;
+        }
+        if keyboard_input.pressed(KeyCode::KeyS) {
+            direction.y -= 1.0;
+        }
+        
+        transform.translation.x += direction.x * SPEED * time.delta().as_secs_f32();
     }
 }
