@@ -6,6 +6,12 @@ use bevy::input::keyboard::KeyCode;
 #[derive(Component)]
 struct Player;
 
+#[derive(Component, Debug)]
+struct Velocity {
+    pub x: f32,
+    pub y: f32,
+}
+
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
@@ -38,16 +44,20 @@ fn setup(mut commands: Commands) {
         Transform::from_xyz(0.0, -200.0, 0.0),
         Visibility::Visible,
         Player,
+        Velocity { x: 0.0, y: 0.0 },
     ));
 }
 
 fn player_movement_system(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut query: Query<&mut Transform, With<Player>>,
+    mut query: Query<(&mut Transform, &mut Velocity), With<Player>>,
     time: Res<Time>,
 ) {
     const SPEED: f32 = 300.0;
-    for mut transform in &mut query {
+    const JUMP_FORCE: f32 = 400.0;
+    const GRAVITY: f32 = -9.8;
+
+    for (mut transform, mut velocity) in &mut query {
         let mut direction = Vec2::ZERO;
         if keyboard_input.pressed(KeyCode::KeyA) {
             direction.x -= 1.0;
@@ -55,13 +65,21 @@ fn player_movement_system(
         if keyboard_input.pressed(KeyCode::KeyD) {
             direction.x += 1.0;
         }
-        if keyboard_input.pressed(KeyCode::KeyW) {
-            direction.y += 1.0;
+        if keyboard_input.pressed(KeyCode::Space) && velocity.y == 0.0 {
+            velocity.y = JUMP_FORCE;  // Jumping logic
         }
-        if keyboard_input.pressed(KeyCode::KeyS) {
-            direction.y -= 1.0;
-        }
-        
+
+        // Horizontal movement
         transform.translation.x += direction.x * SPEED * time.delta().as_secs_f32();
+        
+        // Gravity + vertical motion
+        velocity.y += GRAVITY * time.delta().as_secs_f32();
+        transform.translation.y += velocity.y * time.delta().as_secs_f32();
+
+        // Floor clamp
+        if transform.translation.y < 0.0 {
+            transform.translation.y = 0.0;
+            velocity.y = 0.0;
+        }
     }
 }
