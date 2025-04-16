@@ -24,8 +24,8 @@ pub fn player_movement_system(
     time: Res<Time>,
 ) {
     const SPEED: f32 = 300.0;
-    const JUMP_FORCE: f32 = 100.0;
-    const GRAVITY: f32 = -9.8;
+    const JUMP_FORCE: f32 = (100.0*3.0);
+    const GRAVITY: f32 = -(9.8*20.0);
 
     for (mut transform, mut velocity) in &mut query {
         let mut direction = Vec2::ZERO;
