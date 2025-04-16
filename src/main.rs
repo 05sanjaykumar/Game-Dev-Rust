@@ -12,6 +12,11 @@ struct Velocity {
     pub y: f32,
 }
 
+#[derive(Component)]
+struct Platform;
+
+
+
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
@@ -46,6 +51,31 @@ fn setup(mut commands: Commands) {
         Player,
         Velocity { x: 0.0, y: 0.0 },
     ));
+
+    // Add ground platform
+    commands.spawn((
+        Sprite {
+            color: Color::srgb(0.0, 1.0, 0.0),
+            custom_size: Some(Vec2::new(400.0, 30.0)),
+            ..default()
+        },
+        Transform::from_xyz(0.0, 0.0, 0.0),
+        Visibility::Visible,
+        Platform,
+    ));
+
+    // Add floating platform
+    commands.spawn((
+        Sprite {
+            color: Color::srgb(1.0, 0.647, 0.0),
+            custom_size: Some(Vec2::new(200.0, 30.0)),
+            ..default()
+        },
+        Transform::from_xyz(200.0, 150.0, 0.0),
+        Visibility::Visible,
+        Platform,
+    ));
+
 }
 
 fn player_movement_system(
