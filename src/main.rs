@@ -15,6 +15,6 @@ fn main() {
         .insert_resource(ClearColor(Color::BLACK))
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, (camera::setup_camera, spawn_player, spawn_platforms))
-        .add_systems(Update, (player_movement_system, camera_follow_system))
+        .add_systems(Update, (player_movement_system, platform_collision_system,camera_follow_system))
         .run();
 }
