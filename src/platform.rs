@@ -29,7 +29,7 @@ pub fn spawn_platforms(mut commands: Commands) {
 
 pub fn platform_collision_system(
     mut player_query: Query<(&mut Transform, &mut Velocity), With<Player>>,
-    platform_query: Query<&Transform, With<Platform>>,
+    platform_query: Query<&Transform, (With<Platform>, Without<Player>)>,
 ) {
 
     for (mut player_transform, mut velocity) in &mut player_query {
