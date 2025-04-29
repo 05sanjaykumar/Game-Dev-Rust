@@ -14,7 +14,7 @@ pub fn spawn_player(mut commands: Commands) {
         Transform::from_xyz(0.0, -200.0, 0.0),
         Visibility::Visible,
         Player,
-        Velocity { x: 0.0, y: 0.0 },
+        Velocity { y: 0.0 },
         PlayerState {
             on_ground: true,
             coyote_timer: 0.0,
@@ -30,8 +30,8 @@ pub fn player_movement_system(
     time: Res<Time>,
 ) {
     const SPEED: f32 = 300.0;
-    const JUMP_FORCE: f32 = 100.0*3.0;
-    const GRAVITY: f32 = -(9.8*20.0);
+    const JUMP_FORCE: f32 = 100.0*6.0;
+    const GRAVITY: f32 = -(9.8*100.0);
     const COYOTE_TIME: f32 = 0.15; // seconds
     const JUMP_BUFFER_TIME: f32 = 0.15; // seconds
 
