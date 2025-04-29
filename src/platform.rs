@@ -44,7 +44,9 @@ pub fn platform_collision_system(
             let collision_x = (player_pos.x - platform_pos.x).abs() < (player_size.x + platform_size.x) / 2.0;
             let collision_y = (player_pos.y - platform_pos.y).abs() < (player_size.y + platform_size.y) / 2.0;
 
-            if collision_x && collision_y && velocity.y <= 0.0 {
+            let from_above = player_pos.y > platform_pos.y;
+
+            if collision_x && collision_y && velocity.y <= 0.0 && from_above {
                 player_transform.translation.y = platform_pos.y + (platform_size.y + player_size.y) / 2.0;
                 velocity.y = 0.0;
             }
