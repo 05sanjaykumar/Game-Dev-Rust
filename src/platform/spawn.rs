@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::components::{Platform, Velocity, Player};
+use crate::components::Platform;
 
 pub fn spawn_platforms(mut commands: Commands) {
     // Ground

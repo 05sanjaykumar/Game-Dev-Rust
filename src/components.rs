@@ -18,3 +18,11 @@ pub struct PlayerState {
     pub coyote_timer: f32,
     pub jump_buffer_timer: f32,
 }
+
+#[derive(Component)]
+pub struct MovingPlatform {
+    pub direction: Vec2,
+    pub speed: f32,
+    pub range: f32,
+    pub origin: Vec3,
+}
